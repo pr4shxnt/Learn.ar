@@ -9,9 +9,9 @@ window.LAB_CONFIG = {
     // Beaker (Acid, Base, Product) Configuration
     beaker: {
         scale: { x: 0.5, y: 0.5, z: 0.5 },
-        hitBoxRadius: 0.2,
+        hitBoxRadius: 0.5,
         hitBoxHeight: 0.1,
-        labelY: 0.05,
+        labelY: 0.2,
         labelWidth: 1
     },
 

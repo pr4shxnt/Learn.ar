@@ -217,16 +217,36 @@ class ARChemistryLab {
     }
 
     mixChemicals(beakerDataA, beakerDataB) {
+        if (this.isMixing) return;
         this.isMixing = true;
 
-        const pourer = beakerDataA.element;
-        const target = beakerDataB.element;
+        // Force 'B' (Base) to be the pourer and 'A' (Acid) to be the target
+        let beakerBase, beakerAcid;
+        if (beakerDataA.id === 'B') {
+            beakerBase = beakerDataA;
+            beakerAcid = beakerDataB;
+        } else {
+            beakerBase = beakerDataB;
+            beakerAcid = beakerDataA;
+        }
 
-        const posA = pourer.getAttribute('position');
-        const posB = target.getAttribute('position');
+        const pourer = beakerBase.element;
+        const target = beakerAcid.element;
 
-        const dx = posB.x - posA.x;
-        const dz = posB.z - posA.z;
+        if (!pourer || !target) {
+            console.log("Error: Missing beaker elements");
+            this.isMixing = false;
+            return;
+        }
+
+        // Get static copies of positions to prevent reference issues
+        const pB = pourer.getAttribute('position');
+        const pA = target.getAttribute('position');
+        const posBase = { x: pB.x, y: pB.y, z: pB.z };
+        const posAcid = { x: pA.x, y: pA.y, z: pA.z };
+
+        const dx = posAcid.x - posBase.x;
+        const dz = posAcid.z - posBase.z;
 
         // Reset held state
         if (this.heldBeaker) {
@@ -236,21 +256,40 @@ class ARChemistryLab {
             this.heldBeakerData = null;
         }
 
-        console.log("Starting animation sequence...");
+        console.log(`Mix Start: Base(${posBase.x.toFixed(2)}) -> Acid(${posAcid.x.toFixed(2)})`);
 
-        const angleRad = Math.atan2(dx, dz);
+        const dist = Math.sqrt(dx * dx + dz * dz) || 0.001;
+        const ux = dx / dist;
+        const uz = dz / dist;
 
-        // Stage 1: Move Up
-        pourer.setAttribute('animation__up', {
+        // Calculate position 1 unit away from acid
+        const targetPosX = posAcid.x - ux * 1.0;
+        const targetPosZ = posAcid.z - uz * 1.0;
+
+        // Stage 1: Move Base to 1 unit distance from Acid
+        pourer.setAttribute('animation__move', {
             property: 'position',
-            to: `${posA.x} ${posA.y + 0.3} ${posA.z}`,
-            dur: 800,
-            easing: 'easeOutQuad'
+            to: `${targetPosX} ${posBase.y} ${targetPosZ}`,
+            dur: 1000,
+            easing: 'easeInOutQuad'
         });
 
-        // Stage 2: Tilt towards target
+        // Stage 2: Move Up
         setTimeout(() => {
-            const tiltAngle = 55;
+            if (!pourer) return;
+            pourer.setAttribute('animation__up', {
+                property: 'position',
+                to: `${targetPosX} ${posBase.y + 0.3} ${targetPosZ}`,
+                dur: 800,
+                easing: 'easeOutQuad'
+            });
+        }, 1000);
+
+        // Stage 3: Tilt exactly 45 degrees towards Acid
+        const angleRad = Math.atan2(dx, dz);
+        setTimeout(() => {
+            if (!pourer) return;
+            const tiltAngle = 45;
             const tiltAroundX = Math.cos(angleRad) * tiltAngle;
             const tiltAroundZ = -Math.sin(angleRad) * tiltAngle;
 
@@ -260,36 +299,28 @@ class ARChemistryLab {
                 dur: 1000,
                 easing: 'easeInQuad'
             });
+        }, 1800);
 
-            pourer.setAttribute('animation__closer', {
-                property: 'position',
-                to: `${posA.x + dx * 0.4} ${posA.y + 0.3} ${posA.z + dz * 0.4}`,
-                dur: 1000,
-                easing: 'easeInQuad'
-            });
-        }, 800);
-
-        const reaction = ReactionEngine.getReaction(beakerDataA.name, beakerDataB.name);
+        const reaction = ReactionEngine.getReaction(beakerBase.name, beakerAcid.name);
         this.showReactionEffect(pourer, target, reaction);
         this.showReactionPanel(reaction);
 
         const productPos = {
-            x: (posA.x + posB.x) / 2,
-            y: posB.y,
-            z: (posA.z + posB.z) / 2
+            x: (posBase.x + posAcid.x) / 2,
+            y: posAcid.y,
+            z: (posBase.z + posAcid.z) / 2
         };
 
         setTimeout(() => {
-            console.log("Transforming reactants...");
-            if (pourer.parentNode) pourer.parentNode.removeChild(pourer);
-            if (target.parentNode) target.parentNode.removeChild(target);
+            console.log("Reaction Complete: Transforming...");
+            if (pourer && pourer.parentNode) pourer.parentNode.removeChild(pourer);
+            if (target && target.parentNode) target.parentNode.removeChild(target);
 
-            beakerDataA.isPlaced = false;
-            beakerDataB.isPlaced = false;
+            beakerBase.isPlaced = false;
+            beakerAcid.isPlaced = false;
 
             this.createProductBeaker(productPos, reaction);
             this.isMixing = false;
-            this.showInstruction("Success! Reaction complete. Tap product to reset.");
         }, 4000);
     }
 
