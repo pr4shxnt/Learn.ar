@@ -16,7 +16,10 @@ mongoose
 
 // Routes
 import studentRoutes from "./routes/student.routes.js";
+import learnRoutes from "./routes/learn.routes.js";
+
 app.use("/api/students", studentRoutes);
+app.use("/api/learn", learnRoutes);
 
 app.get("/", (req, res) => {
   res.send(`${process.env.APP_NAME}`);

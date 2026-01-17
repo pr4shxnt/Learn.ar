@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 const Chemistry = () => {
+  const navigate = useNavigate();
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header>
@@ -28,13 +31,15 @@ const Chemistry = () => {
       </div>
 
       <div className="space-y-4">
-        {["Organic Chemistry",
-         "Inorganic Chemistry",
-         "Physical Chemistry"].map(
+        {["Organic Chemistry", "Inorganic Chemistry", "Physical Chemistry"].map(
           (topic, i) => (
-            <div
+            <button
               key={i}
-              className="bg-gray-200 p-4 rounded-3xl shadow-[8px_8px_16px_rgba(163,177,198,0.6),-8px_-8px_16px_rgba(255,255,255,0.5)] flex justify-between items-center group"
+              onClick={() =>
+                topic === "Organic Chemistry" &&
+                navigate("/dashboard/chemistry/ch1")
+              }
+              className="bg-gray-200 w-full p-4 rounded-3xl shadow-[8px_8px_16px_rgba(163,177,198,0.6),-8px_-8px_16px_rgba(255,255,255,0.5)] flex justify-between items-center group cursor-pointer active:scale-95 transition-transform"
             >
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-gray-900 rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-md">
@@ -62,7 +67,7 @@ const Chemistry = () => {
                   />
                 </svg>
               </div>
-            </div>
+            </button>
           ),
         )}
       </div>

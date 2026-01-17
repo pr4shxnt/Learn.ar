@@ -14,6 +14,8 @@ import Chemistry from "./components/dashboard/Chemistry";
 import Biology from "./components/dashboard/Biology";
 import SelfStudy from "./components/dashboard/SelfStudy";
 import Profile from "./components/dashboard/Profile";
+import OrganicReaction from "./components/auth/chapters/chemistry/organic/OrganicReaction";
+import Assessment from "./components/auth/chapters/chemistry/organic/Assessment";
 
 const router = createBrowserRouter([
   {
@@ -45,7 +47,15 @@ const router = createBrowserRouter([
           },
           {
             path: "chemistry/ch1",
-            element: <Chemistry />,
+            element: <OrganicReaction />,
+          },
+          {
+            path: "chemistry/organic",
+            element: <OrganicReaction />,
+          },
+          {
+            path: "chemistry/assessment",
+            element: <Assessment />,
           },
           {
             path: "biology",
