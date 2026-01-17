@@ -4,6 +4,9 @@ class ARChemistryLab {
         this.placedBeakers = 0;
         this.isMixing = false;
         this.reticle = null;
+        this.heldBeaker = null;
+        this.heldBeakerData = null;
+        this.lastClickTime = 0;
         this.setupDebugLogger();
         this.init();
     }
@@ -83,10 +86,51 @@ class ARChemistryLab {
     setupEventListeners() {
         const scene = document.querySelector('a-scene');
 
-        // Tap to place beakers
+        // Tap to place or pick/drop beakers
         scene.addEventListener('click', (e) => {
             if (!scene.is('ar-mode')) return;
 
+            // Debounce
+            const now = Date.now();
+            if (now - this.lastClickTime < 300) return;
+            this.lastClickTime = now;
+
+            const intersection = e.detail.intersection;
+
+            // 1. If holding a beaker, drop it
+            if (this.heldBeaker) {
+                console.log("Released " + this.heldBeakerData.id);
+                this.heldBeaker.removeAttribute('animation');
+                this.heldBeaker.setAttribute('scale', '1 1 1');
+                this.heldBeaker = null;
+                this.heldBeakerData = null;
+                return;
+            }
+
+            // 2. Check if picking up
+            const beakerEl = e.target.closest('.beaker') ||
+                (intersection && intersection.object.el.closest('.beaker'));
+
+            if (beakerEl && !this.isMixing) {
+                const beakerId = beakerEl.getAttribute('id').replace('beaker-', '');
+                const beakerData = this.beakers.find(b => b.id === beakerId);
+
+                if (beakerData) {
+                    console.log("Held " + beakerId);
+                    this.heldBeaker = beakerEl;
+                    this.heldBeakerData = beakerData;
+                    this.heldBeaker.setAttribute('animation', {
+                        property: 'scale',
+                        to: '1.2 1.2 1.2',
+                        dir: 'alternate',
+                        dur: 500,
+                        loop: true
+                    });
+                }
+                return;
+            }
+
+            // 3. Otherwise, place a new beaker
             if (this.placedBeakers < 2 && this.reticle && this.reticle.getAttribute('visible')) {
                 const position = this.reticle.getAttribute('position');
                 console.log("Placing beaker at " + position.x.toFixed(2));
@@ -151,6 +195,13 @@ class ARChemistryLab {
                     if (planeHit) {
                         this.reticle.setAttribute('position', planeHit.point);
                         this.reticle.setAttribute('visible', true);
+
+                        // If holding a beaker, move it to reticle position
+                        if (this.heldBeaker && !this.isMixing) {
+                            this.heldBeaker.setAttribute('position', planeHit.point);
+                        }
+                    } else if (!this.heldBeaker) {
+                        // Position reticle in front...
                     }
                 }
             }
