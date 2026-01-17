@@ -1,27 +1,6 @@
-import Subject from "../models/subject.model.js";
 import Chapter from "../models/chapters.model.js";
 import Assessment from "../models/assesments.model.js";
-
-// --- Subject Controllers ---
-
-export const getAllSubjects = async (req, res) => {
-  try {
-    const subjects = await Subject.find();
-    res.status(200).json(subjects);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const createSubject = async (req, res) => {
-  try {
-    const { name, description, chapterNumber } = req.body;
-    const subject = await Subject.create({ name, description, chapterNumber });
-    res.status(201).json(subject);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+import { uploadToCloudinary } from "../services/cloudinary.service.js";
 
 // --- Chapter Controllers ---
 
@@ -37,13 +16,24 @@ export const getChaptersBySubject = async (req, res) => {
 
 export const createChapter = async (req, res) => {
   try {
-    const { name, description, chapterNumber, subject, threeDModel } = req.body;
+    const { name, description, chapterNumber, subject, topic } = req.body;
+    let threeDModelUrl = "";
+
+    if (req.file) {
+      const result = await uploadToCloudinary(
+        req.file.buffer,
+        "chapters/models",
+      );
+      threeDModelUrl = result.secure_url;
+    }
+
     const chapter = await Chapter.create({
       name,
       description,
       chapterNumber,
       subject,
-      threeDModel,
+      topic,
+      threeDModel: threeDModelUrl,
     });
     res.status(201).json(chapter);
   } catch (error) {

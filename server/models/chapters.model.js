@@ -15,8 +15,24 @@ const chapterSchema = new mongoose.Schema({
     required: true,
   },
   subject: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Subject",
+    type: String,
+    required: true,
+    enum: ["Chemistry", "Biology"],
+  },
+  topic: {
+    type: String,
+    required: true,
+    enum: (subject) => {
+      if (subject === "Chemistry") {
+        return [
+          "Organic Chemistry",
+          "Inorganic Chemistry",
+          "Physical Chemistry",
+        ];
+      } else {
+        return ["Anatomy", "Cells", "Genetics"];
+      }
+    },
   },
   threeDModel: {
     type: String,

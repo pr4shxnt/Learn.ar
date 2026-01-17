@@ -23,4 +23,9 @@ export const uploadSingle = upload.single("image");
 export const uploadArray = (fieldName, maxCount = 5) =>
   upload.array(fieldName, maxCount);
 
+/**
+ * Multer middleware for handling 3D model (.glb) uploads to memory.
+ */
+export const uploadThreeDModel = upload.single("threeDModel");
+
 export { upload };
