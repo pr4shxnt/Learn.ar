@@ -30,11 +30,24 @@ class ARChemistryLab {
     init() {
         document.querySelector('a-scene').addEventListener('loaded', () => {
             this.reticle = document.querySelector('#reticle');
+            this.applyConfig();
             this.createBeakerModels();
             this.setupEventListeners();
             this.setupWebXR();
             this.startReticleLoop();
         });
+    }
+
+    applyConfig() {
+        if (!window.LAB_CONFIG) return;
+        const config = window.LAB_CONFIG;
+
+        // Apply reticle config
+        if (this.reticle) {
+            this.reticle.setAttribute('radius-inner', config.reticle.radiusInner);
+            this.reticle.setAttribute('radius-outer', config.reticle.radiusOuter);
+            this.reticle.setAttribute('color', config.reticle.color);
+        }
     }
 
     createBeakerModels() {
@@ -148,26 +161,24 @@ class ARChemistryLab {
         // Create beaker entity
         const beaker = document.createElement('a-entity');
         beaker.setAttribute('id', `beaker-${beakerData.id}`);
+        beaker.setAttribute('class', 'beaker');
         beaker.setAttribute('position', position);
+
+        const modelId = beakerData.id === 'A' ? '#acid-model' : '#base-model';
+        const config = window.LAB_CONFIG.beaker;
 
         // 3D Model with larger invisible hit-box
         beaker.innerHTML = `
             <!-- Invisible Hit-box -->
-            <a-cylinder class="hit-box" radius="0.25" height="0.4" 
-                       position="0 0.1 0" material="opacity: 0; transparent: true; visible: false" 
-                       data-raycastable>
+            <a-cylinder class="hit-box" radius="${config.hitBoxRadius}" height="${config.hitBoxHeight}" 
+                       position="0 ${config.hitBoxHeight / 2} 0" material="opacity: 0; transparent: true; visible: false">
             </a-cylinder>
             
             <!-- The 3D Beaker Model (Glass) -->
-            <a-gltf-model src="#beaker-model" scale="25 25 25" data-raycastable></a-gltf-model>
-            
-            <!-- Solid Liquid Component -->
-            <a-cylinder class="beaker-liquid" radius="0.05" height="0.15" 
-                       position="0 0.07 0" color="${beakerData.color}" opacity="0.9" data-raycastable>
-            </a-cylinder>
+            <a-gltf-model src="${modelId}" scale="${config.scale.x} ${config.scale.y} ${config.scale.z}"></a-gltf-model>
             
             <a-text class="beaker-label" value="${beakerData.name}\n${beakerData.label}"
-                   position="0 0.4 0" align="center" color="white" width="3" data-raycastable>
+                   position="0 ${config.labelY} 0" align="center" color="white" width="${config.labelWidth}">
             </a-text>
         `;
 
@@ -198,7 +209,8 @@ class ARChemistryLab {
             );
 
             // If beakers are close enough
-            if (distance < 0.25) {
+            const threshold = window.LAB_CONFIG.interaction.mixingDistance;
+            if (distance < threshold) {
                 this.mixChemicals(beakerDataA, beakerB);
             }
         });
@@ -289,11 +301,11 @@ class ARChemistryLab {
         product.setAttribute('position', position);
         product.setAttribute('id', 'product-beaker');
 
+        const config = window.LAB_CONFIG.beaker;
         product.innerHTML = `
-            <a-gltf-model src="#beaker-model" scale="25 25 25" data-raycastable></a-gltf-model>
-            <a-cylinder radius="0.05" height="0.15" position="0 0.07 0" color="#ffffff" opacity="0.7" data-raycastable></a-cylinder>
-            <a-text value="Product:\n${reaction.products}" position="0 0.4 0" align="center" color="white" width="3" data-raycastable></a-text>
-            <a-text value="(Tap to Reset Lab)" position="0 -0.15 0" align="center" color="#aaa" width="1.5"></a-text>
+            <a-gltf-model src="#salt-model" scale="${config.scale.x} ${config.scale.y} ${config.scale.z}"></a-gltf-model>
+            <a-text value="Product:\n${reaction.products}" position="0 ${config.labelY} 0" align="center" color="white" width="${config.labelWidth}"></a-text>
+            <a-text value="(Tap to Reset Lab)" position="0 -0.05 0" align="center" color="#aaa" width="0.5"></a-text>
         `;
 
         scene.appendChild(product);
