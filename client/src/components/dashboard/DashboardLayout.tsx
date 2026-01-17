@@ -4,7 +4,7 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname.startsWith(path);
 
   return (
     <div className="w-screen h-screen bg-[#e0e5ec] flex flex-col relative">
@@ -13,18 +13,18 @@ const DashboardLayout = () => {
         <Outlet />
       </div>
 
-      {/* Bottom Dock */}
+      {/* This is the navigation dock section for the main application*/}
       <div className="fixed bottom-0 left-0 w-full bg-[#e0e5ec] shadow-[0_-8px_20px_rgba(163,177,198,0.4)] rounded-t-[2.5rem] px-6 py-4 flex justify-between items-center z-50 h-20">
         {/* Home */}
         <button
-          onClick={() => navigate("/dashboard")}
-          className={`flex flex-col items-center gap-1 transition-all ${isActive("/dashboard") ? "text-white" : "text-gray-400"}`}
+          onClick={() => navigate("/dashboard/home")}
+          className={`flex flex-col items-center gap-1 transition-all ${isActive("/dashboard/home") ? "text-white" : "text-gray-400"}`}
         >
           <div
-            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isActive("/dashboard") ? "bg-gray-900 shadow-md" : "bg-gray-200 shadow-[inset_-2px_-2px_5px_rgba(255,255,255,0.7),inset_2px_2px_5px_rgba(0,0,0,0.1)]"}`}
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isActive("/dashboard/home") ? "bg-gray-900 shadow-md" : "bg-gray-200 shadow-[inset_-2px_-2px_5px_rgba(255,255,255,0.7),inset_2px_2px_5px_rgba(0,0,0,0.1)]"}`}
           >
             <svg
-              className={`w-5 h-5 ${isActive("/dashboard") ? "text-white" : "text-gray-500"}`}
+              className={`w-5 h-5 ${isActive("/dashboard/home") ? "text-white" : "text-gray-500"}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

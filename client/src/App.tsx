@@ -1,5 +1,9 @@
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import LoginPage from "./components/no_auth/LoginPage";
@@ -28,11 +32,19 @@ const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
           {
-            path: "",
+            index: true,
+            element: <Navigate to="/dashboard/home" replace />,
+          },
+          {
+            path: "home",
             element: <Home />,
           },
           {
             path: "chemistry",
+            element: <Chemistry />,
+          },
+          {
+            path: "chemistry/ch1",
             element: <Chemistry />,
           },
           {

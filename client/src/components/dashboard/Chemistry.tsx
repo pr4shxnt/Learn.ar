@@ -28,42 +28,43 @@ const Chemistry = () => {
       </div>
 
       <div className="space-y-4">
-        {[
-          "Atomic Structure",
-          "Chemical Bonding",
-          "Thermodynamics",
-          "Equilibrium",
-        ].map((topic, i) => (
-          <div
-            key={i}
-            className="bg-gray-200 p-4 rounded-3xl shadow-[8px_8px_16px_rgba(163,177,198,0.6),-8px_-8px_16px_rgba(255,255,255,0.5)] flex justify-between items-center group"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gray-900 rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-md">
-                {i + 1}
+        {["Organic Chemistry",
+         "Inorganic Chemistry",
+         "Physical Chemistry"].map(
+          (topic, i) => (
+            <div
+              key={i}
+              className="bg-gray-200 p-4 rounded-3xl shadow-[8px_8px_16px_rgba(163,177,198,0.6),-8px_-8px_16px_rgba(255,255,255,0.5)] flex justify-between items-center group"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-gray-900 rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-md">
+                  {i + 1}
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-700 text-sm">
+                    {topic}
+                  </h4>
+                  <p className="text-xs text-gray-400">12 Lessons</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold text-gray-700 text-sm">{topic}</h4>
-                <p className="text-xs text-gray-400">12 Lessons</p>
+              <div className="w-8 h-8 rounded-full bg-gray-200 shadow-[inset_-2px_-2px_5px_rgba(255,255,255,0.7),inset_2px_2px_5px_rgba(0,0,0,0.1)] flex items-center justify-center">
+                <svg
+                  className="w-4 h-4 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
               </div>
             </div>
-            <div className="w-8 h-8 rounded-full bg-gray-200 shadow-[inset_-2px_-2px_5px_rgba(255,255,255,0.7),inset_2px_2px_5px_rgba(0,0,0,0.1)] flex items-center justify-center">
-              <svg
-                className="w-4 h-4 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-          </div>
-        ))}
+          ),
+        )}
       </div>
     </div>
   );
