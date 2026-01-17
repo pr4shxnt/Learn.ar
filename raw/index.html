@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-xr@latest/dist/aframe-xr.min.js"></script>
+    <script src="https://www.gstatic.com/draco/versioned/decoders/1.5.6/draco_decoder.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -21,7 +22,7 @@
     <!-- AR Scene -->
     <a-scene xr-mode-ui="enabled: false" xrweb="enabled: true">
         <a-assets>
-            <a-asset-item id="beaker-model" src="assets/models/beaker.glb"></a-asset-item>
+            <a-asset-item id="beaker-model" src="assets/models/beaker_draco.glb"></a-asset-item>
         </a-assets>
 
         <!-- Camera -->
