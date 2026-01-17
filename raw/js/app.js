@@ -267,20 +267,20 @@ class ARChemistryLab {
         const targetPosX = posAcid.x - ux * pourDisp;
         const targetPosZ = posAcid.z - uz * pourDisp;
 
-        // Stage 1: Move Base
+        // Stage 1: Move Base to Acid's vertical level at a distance
         pourer.setAttribute('animation__move', {
             property: 'position',
-            to: `${targetPosX} ${posBase.y} ${targetPosZ}`,
+            to: `${targetPosX} ${posAcid.y} ${targetPosZ}`,
             dur: config.moveDuration || 1000,
             easing: 'easeInOutQuad'
         });
 
-        // Stage 2: Move Up
+        // Stage 2: Move Up relative to Acid
         setTimeout(() => {
             if (!pourer) return;
             pourer.setAttribute('animation__up', {
                 property: 'position',
-                to: `${targetPosX} ${posBase.y + (config.liftHeight || 0.3)} ${targetPosZ}`,
+                to: `${targetPosX} ${posAcid.y + (config.liftHeight || 0.3)} ${targetPosZ}`,
                 dur: config.liftDuration || 800,
                 easing: 'easeOutQuad'
             });
