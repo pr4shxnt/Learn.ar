@@ -79,6 +79,37 @@
             outline: 1px solid #4285f4;
         }
 
+        /* Custom Reticle Styles */
+        #reticle {
+            width: 100px;
+            height: 100px;
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        model-viewer[ar-status="session-started"] #reticle {
+            display: block;
+        }
+
+        .reticle-ring {
+            stroke: #4285f4;
+            stroke-width: 4;
+            fill: none;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            animation: ring-draw 2s ease-out forwards;
+        }
+
+        @keyframes ring-draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
         @keyframes pulse {
             0% {
                 opacity: 1;
@@ -110,6 +141,13 @@
                 <div slot="ar-failure" style="display: none;">
                     AR not available on this device
                 </div>
+
+                <div id="reticle" slot="reticle">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <circle class="reticle-ring" cx="50" cy="50" r="45" />
+                        <circle cx="50" cy="50" r="5" fill="#4285f4" />
+                    </svg>
+                </div>
             </model-viewer>
         </div>
     </div>
@@ -124,8 +162,18 @@
                 console.log('Object has been placed in AR');
                 // Lock interaction once placed to prevent unintentional sliding
                 modelViewer.interactionPrompt = 'none';
+
+                // Optional: Provide visual feedback that placement occurred
+                const arButton = document.querySelector('#ar-button');
+                if (arButton) arButton.textContent = 'Placed!';
+                setTimeout(() => {
+                    if (arButton) arButton.textContent = 'View in your space';
+                }, 3000);
             }
         });
+
+        // Ensure the model is hidden until placed if desired, 
+        // but by default model-viewer handles this with the reticle.
     </script>
 </body>
 
