@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  getChaptersBySubject,
+  getChapterNamesWithIdBySubject,
   createChapter,
   getAssessmentByChapter,
   createAssessment,
@@ -10,7 +10,7 @@ import { uploadThreeDModel } from "../middlewares/multer.middleware.js";
 const router = express.Router();
 
 // Chapter routes
-router.get("/subjects/:subjectName/chapters", getChaptersBySubject);
+router.get("/subjects/:subjectName/chapters", getChapterNamesWithIdBySubject);
 router.post("/chapters", uploadThreeDModel, createChapter);
 
 // Assessment routes

@@ -618,6 +618,8 @@ const OrganicReaction: React.FC = () => {
         webxr="optionalFeatures: dom-overlay; overlayElement: #ar-ui-container"
         gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/versioned/decoders/1.5.6/;"
       >
+
+        {/* GLB Model declarations */}
         <a-assets>
           <a-asset-item
             id="beaker-model"

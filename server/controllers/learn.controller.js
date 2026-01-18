@@ -41,6 +41,21 @@ export const createChapter = async (req, res) => {
   }
 };
 
+export const getChapterNamesWithIdBySubject = async (req, res) => {
+  try {
+    const { subjectName } = req.params;
+    const chapters = await Chapter.find({ subject: subjectName });
+    const chapterNamesWithId = chapters.map((chapter) => ({
+      id: `chem_ch${chapter.chapterNumber}`,
+      identification: chapter._id,
+      name: chapter.name,
+    }));
+    res.status(200).json(chapterNamesWithId);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // --- Assessment Controllers ---
 
 export const getAssessmentByChapter = async (req, res) => {
