@@ -8,12 +8,15 @@ import {
 } from "@react-three/drei";
 import { useParams, useNavigate } from "react-router-dom";
 import { MOCK_BIOLOGY_CHAPTERS } from "./mockData";
+import { XR, createXRStore } from "@react-three/xr";
 
 // Component to load and display the GLTF model
 const Model = ({ url }: { url: string }) => {
   const { scene } = useGLTF(url);
   return <primitive object={scene} scale={1.5} />;
 };
+
+const store = createXRStore();
 
 const HumanAnatomy = () => {
   const { chapterId } = useParams<{ chapterId: string }>();
@@ -54,45 +57,56 @@ const HumanAnatomy = () => {
             {data.description.description}
           </p>
         </div>
-        <button
-          onClick={() => navigate("/dashboard/biology")}
-          className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition-colors"
-        >
-          Back to Biology
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={() => store.enterAR()}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm transition-colors font-semibold"
+          >
+            Enter AR
+          </button>
+          <button
+            onClick={() => navigate("/dashboard/biology")}
+            className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition-colors"
+          >
+            Back to Biology
+          </button>
+        </div>
       </header>
 
       <div className="flex-1 relative">
         <Canvas>
-          <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-          <OrbitControls
-            enablePan={true}
-            enableZoom={true}
-            enableRotate={true}
-          />
+          <XR store={store}>
+            <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+            <OrbitControls
+              enablePan={true}
+              enableZoom={true}
+              enableRotate={true}
+            />
 
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={1} />
+            <ambientLight intensity={0.5} />
+            <directionalLight position={[10, 10, 5]} intensity={1} />
 
-          <Suspense fallback={null}>
-            {data.threeDModels.length > 0 ? (
-              <Model url={data.threeDModels[0]} />
-            ) : (
-              <mesh rotation={[0, 0, 0]}>
-                <boxGeometry args={[2, 2, 2]} />
-                <meshStandardMaterial color="mediumpurple" />
-              </mesh>
-            )}
-            <Environment preset="city" />
-          </Suspense>
+            <Suspense fallback={null}>
+              {data.threeDModels.length > 0 ? (
+                <Model url={data.threeDModels[0]} />
+              ) : (
+                <mesh rotation={[0, 0, 0]}>
+                  <boxGeometry args={[2, 2, 2]} />
+                  <meshStandardMaterial color="mediumpurple" />
+                </mesh>
+              )}
+              <Environment preset="city" />
+            </Suspense>
+          </XR>
         </Canvas>
 
-        <div className="absolute bottom-4 left-4 bg-black/50 p-4 rounded-xl backdrop-blur-sm max-w-xs">
+        <div className="absolute bottom-4 left-4 bg-black/50 p-4 rounded-xl backdrop-blur-sm max-w-xs pointer-events-none">
           <h3 className="font-bold text-lg mb-2">Controls</h3>
           <ul className="text-sm text-gray-300 space-y-1">
             <li>• Left Click + Drag to Rotate</li>
             <li>• Right Click + Drag to Pan</li>
             <li>• Scroll to Zoom</li>
+            <li>• Click "Enter AR" for Augmented Reality</li>
           </ul>
         </div>
       </div>
