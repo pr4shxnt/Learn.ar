@@ -33,4 +33,27 @@ Imagine visualizing a beating human heart in 3D right on your desk or witnessing
 - **Personalized Dashboard**: Track your learning progress through specific chapters and assessments.
 - **Integrated Assessments**: Test your knowledge with chapter-wise quizzes and feedback.
 
+## ⚙️ Installation & Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/stha-sanket/TechSprint_visionary.git
+   cd TechSprint_visionary
+   ```
+
+2. **Server Setup:**
+   ```bash
+   cd server
+   npm install
+   # Create a .env file and add your MongoDB_URI, GEMINI_API_KEY, and PORT
+   npm start
+   ```
+
+3. **Client Setup:**
+   ```bash
+   cd ../client
+   npm install
+   npm run dev
+   ```
+
 ---
