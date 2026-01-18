@@ -16,7 +16,7 @@ import SelfStudy from "./components/dashboard/SelfStudy";
 import Profile from "./components/dashboard/Profile";
 import InorganicReaction from "./components/auth/chapters/chemistry/inorganic/InorganicReaction";
 import Assessment from "./components/auth/chapters/chemistry/Assessment";
-import HumanAnatomy from "./components/dashboard/biology/HumanAnatomy";
+import HumanAnatomy from "./components/dashboard/biology/human_anatomy/HumanAnatomy";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { AuthProvider } from "./components/auth/AuthContext";
