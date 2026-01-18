@@ -25,4 +25,12 @@ Imagine visualizing a beating human heart in 3D right on your desk or witnessing
 - **Cloudinary**: Cloud storage for project assets and media.
 - **JWT & Bcrypt**: Secure authentication and password hashing.
 
+## ✨ Key Features
+
+- **AR Visualization**: Explore 3D biological and chemical models using your device's camera.
+- **AI Tutoring**: Ask Gemini-powered AI questions about any topic for instant, accurate explanations.
+- **Interactive Labs**: Engage with virtual chemistry experiments and reactions.
+- **Personalized Dashboard**: Track your learning progress through specific chapters and assessments.
+- **Integrated Assessments**: Test your knowledge with chapter-wise quizzes and feedback.
+
 ---
