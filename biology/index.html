@@ -60,8 +60,8 @@
 <body>
     <div class="container">
                 <model-viewer 
-                    id=""
-                    src=""
+                    id="Human Anatomy"
+                    src="Beating%20heart.glb"
                     ar
                     ar-modes="webxr scene-viewer quick-look"
                     camera-controls
@@ -69,7 +69,7 @@
                     shadow-intensity="1.2"
                     exposure="1.2"
                     interaction-prompt="auto"
-                    alt=""
+                    alt="Animated 3D model of a beating human heart"
                     ar-scale="auto"
                     ar-placement="floor"
                     touch-action="pan-y"
@@ -77,6 +77,7 @@
                     reveal="auto"
                     auto-rotate
                     auto-rotate-delay="1000">
+                    <!-- Fallback message for AR -->
                     <div slot="ar-failure" style="display: none;">
                         AR not available on this device
                     </div>
