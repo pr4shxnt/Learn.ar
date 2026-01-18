@@ -56,4 +56,11 @@ Imagine visualizing a beating human heart in 3D right on your desk or witnessing
    npm run dev
    ```
 
+## 👥 Team Members
+
+- **Sanket Shrestha**
+- **Prashant Adhikari**
+- **Smriti Basnet**
+- **Priyanka Khatri**
+
 ---
