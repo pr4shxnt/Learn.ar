@@ -1,4 +1,4 @@
-# Visionary
+# Learn.AR
 
 ### 🚀 Redefining Education through Immersive Augmented Reality & AI
 
@@ -13,9 +13,9 @@
 ---
 ## 📖 Overview
 
-**Visionary** is an innovative learning platform designed to bridge the gap between abstract concepts and real-world understanding. By leveraging the power of **Augmented Reality (AR)** and **Generative AI**, we provide students with an interactive, hands-on experience in subjects like Biology and Chemistry.
+**Learn.AR** is an innovative learning platform designed to bridge the gap between abstract concepts and real-world understanding. By leveraging the power of **Augmented Reality (AR)** and **Generative AI**, we provide students with an interactive, hands-on experience in subjects like Biology and Chemistry.
 
-Imagine visualizing a beating human heart in 3D right on your desk or witnessing complex chemical reactions in a safe, virtual environment—that's the power of Visionary.
+Imagine visualizing a beating human heart in 3D right on your desk or witnessing complex chemical reactions in a safe, virtual environment—that's the power of Learn.AR.
 
 ## 🛠️ Tech Stack
 
@@ -65,7 +65,7 @@ Imagine visualizing a beating human heart in 3D right on your desk or witnessing
    npm run dev
    ```
 
-## 👥 Team Members
+## 👥 Team Visionary
 
 - **Sanket Shrestha**
 - **Prashant Adhikari**
@@ -92,7 +92,3 @@ Imagine visualizing a beating human heart in 3D right on your desk or witnessing
 ## 📄 License
 
 This project is licensed under the ISC License. See the `package.json` file for more details.
-
----
-
-<p align="center">Made with ❤️ for TechSprint</p>
