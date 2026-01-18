@@ -1,4 +1,29 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { loginUser } from "../../redux/slices/authSlice";
+import type { RootState } from "../../redux/store";
+
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { loading, error, token } = useAppSelector(
+    (state: RootState) => state.auth,
+  );
+
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [token, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(loginUser({ email, password }));
+  };
+
   return (
     <>
       <div className="w-screen h-screen bg-[#e0e5ec] m-0 p-0">
@@ -13,18 +38,24 @@ const LoginPage = () => {
               </p>
             </div>
           </div>
-          <div className="bg-[#e0e5ec] w-full h-[80%] rounded-t-[3rem] px-8 pt-12 flex flex-col items-center shadow-[0_-8px_20px_rgba(163,177,198,0.4)]">
+          <div className="bg-[#e0e5ec] w-full h-[80%] rounded-t-[3rem] px-8 pt-12 flex flex-col items-center shadow-[0_-8px_20px_rgba(163,177,198,0.4)] overflow-y-auto">
             <h2 className="text-center font-bold text-lg mb-8 text-gray-700">
               Please Log in to continue
             </h2>
-            <form className="w-full flex flex-col gap-6">
+            <form
+              className="w-full flex flex-col gap-6"
+              onSubmit={handleSubmit}
+            >
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold text-gray-600 ml-1">
                   Email
                 </label>
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
+                  required
                   className="w-full px-4 py-3 rounded-2xl bg-[#e0e5ec] shadow-[inset_-2px_-2px_5px_rgba(255,255,255,0.7),inset_2px_2px_5px_rgba(0,0,0,0.1)] focus:outline-none text-gray-700 placeholder:text-gray-400 transition-all"
                 />
               </div>
@@ -35,7 +66,10 @@ const LoginPage = () => {
                 </label>
                 <input
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
+                  required
                   className="w-full px-4 py-3 rounded-2xl bg-[#e0e5ec] shadow-[inset_-2px_-2px_5px_rgba(255,255,255,0.7),inset_2px_2px_5px_rgba(0,0,0,0.1)] focus:outline-none text-gray-700 placeholder:text-gray-400 transition-all"
                 />
                 <div className="flex justify-end">
@@ -48,12 +82,22 @@ const LoginPage = () => {
                 </div>
               </div>
 
-              <button className="w-full bg-gray-900 text-white font-bold py-3.5 rounded-2xl shadow-[8px_8px_16px_rgba(163,177,198,0.6),-4px_-4px_12px_rgba(255,255,255,0.5)] active:scale-95 transition-all mt-4 text-lg">
-                Log In
+              {error && (
+                <p className="text-red-500 text-xs text-center font-medium">
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gray-900 text-white font-bold py-3.5 rounded-2xl shadow-[8px_8px_16px_rgba(163,177,198,0.6),-4px_-4px_12px_rgba(255,255,255,0.5)] active:scale-95 transition-all mt-4 text-lg disabled:opacity-70"
+              >
+                {loading ? "Logging in..." : "Log In"}
               </button>
             </form>
 
-            <div className="mt-8 flex flex-col items-center gap-4 w-full">
+            <div className="mt-8 flex flex-col items-center gap-4 w-full pb-8">
               <div className="flex items-center w-full gap-2">
                 <div className="h-px bg-gray-400 flex-1"></div>
                 <span className="text-xs text-gray-400 font-medium">OR</span>
@@ -84,12 +128,12 @@ const LoginPage = () => {
 
               <p className="text-sm text-gray-600">
                 Don't have an account?{" "}
-                <a
-                  href="/signup"
+                <button
+                  onClick={() => navigate("/signup")}
                   className="text-blue-400 font-bold hover:underline"
                 >
                   Sign Up
-                </a>
+                </button>
               </p>
             </div>
           </div>

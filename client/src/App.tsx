@@ -14,8 +14,11 @@ import Chemistry from "./components/dashboard/Chemistry";
 import Biology from "./components/dashboard/Biology";
 import SelfStudy from "./components/dashboard/SelfStudy";
 import Profile from "./components/dashboard/Profile";
-import InorganicReaction from "./components/auth/chapters/chemistry/organic/InorganicReaction";
-import Assessment from "./components/auth/chapters/chemistry/organic/Assessment";
+import InorganicReaction from "./components/auth/chapters/chemistry/inorganic/InorganicReaction";
+import Assessment from "./components/auth/chapters/chemistry/Assessment";
+
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import { AuthProvider } from "./components/auth/AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +34,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <DashboardLayout />,
+        element: (
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
+        ),
         children: [
           {
             index: true,
@@ -74,7 +81,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </Provider>
   );
 }

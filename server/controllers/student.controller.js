@@ -10,7 +10,7 @@ export const registerStudent = async (req, res) => {
     const { name, email, password, number } = req.body;
 
     // Validation
-    if (!name || !email || !password || !number) {
+    if (!name || !email || !password) {
       return res
         .status(400)
         .json({ message: "Please provide all required fields" });
@@ -28,7 +28,7 @@ export const registerStudent = async (req, res) => {
     }
 
     const studentExists = await Student.findOne({
-      $or: [{ email }, { number }],
+      $or: [{ email }],
     });
 
     if (studentExists) {
@@ -51,7 +51,7 @@ export const registerStudent = async (req, res) => {
         _id: student._id,
         name: student.name,
         email: student.email,
-        number: student.number,
+        number: "0000000000",
         token: generateToken(student._id, "30d"),
       });
     } else {
@@ -88,6 +88,28 @@ export const loginStudent = async (req, res) => {
       });
     } else {
       res.status(401).json({ message: "Invalid email or password" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get current student data
+// @route   GET /api/students/me
+// @access  Private
+export const getMe = async (req, res) => {
+  try {
+    const student = await Student.findById(req.user._id);
+
+    if (student) {
+      res.json({
+        _id: student._id,
+        name: student.name,
+        email: student.email,
+        number: student.number,
+      });
+    } else {
+      res.status(404).json({ message: "Student not found" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
