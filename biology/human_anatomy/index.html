@@ -83,16 +83,7 @@
         #reticle {
             width: 100px;
             height: 100px;
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             pointer-events: none;
-        }
-
-        model-viewer[ar-status="session-started"] #reticle {
-            display: block;
         }
 
         .reticle-ring {
@@ -154,26 +145,34 @@
 
     <script>
         const modelViewer = document.querySelector('#human-anatomy-viewer');
+        const arButton = document.querySelector('#ar-button');
+
+        // Store the desired final scale from the model-viewer attribute
+        const finalScale = modelViewer.getAttribute('scale') || "8 8 8";
 
         modelViewer.addEventListener('ar-status', (event) => {
             if (event.detail.status === 'session-started') {
                 console.log('AR session started');
+                // Hide model using a tiny scale to avoid GL errors on some devices
+                modelViewer.scale = "0.0001 0.0001 0.0001";
+                if (arButton) arButton.textContent = 'Tap to drop model';
             } else if (event.detail.status === 'object-placed') {
                 console.log('Object has been placed in AR');
-                // Lock interaction once placed to prevent unintentional sliding
-                modelViewer.interactionPrompt = 'none';
 
-                // Optional: Provide visual feedback that placement occurred
-                const arButton = document.querySelector('#ar-button');
-                if (arButton) arButton.textContent = 'Placed!';
+                // Show the model at the desired scale
+                modelViewer.scale = finalScale;
+
+                // LOCK POSITION & SCALE
+                modelViewer.interactionPrompt = 'none';
+                modelViewer.arScale = 'fixed';
+
+                // Visual confirmation
+                if (arButton) arButton.textContent = 'Locked & Fixed';
                 setTimeout(() => {
                     if (arButton) arButton.textContent = 'View in your space';
                 }, 3000);
             }
         });
-
-        // Ensure the model is hidden until placed if desired, 
-        // but by default model-viewer handles this with the reticle.
     </script>
 </body>
 
