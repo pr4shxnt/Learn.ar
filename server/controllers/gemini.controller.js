@@ -71,7 +71,7 @@ const geminiController = async (req, res) => {
         contents: [
           {
             role: "user",
-            parts: currentParts,
+            parts: currentParts, // This array now contains your fileData and/or text
           },
         ],
         systemInstruction: {
