@@ -1,20 +1,5 @@
-# Title: AR based Learning System with Ai
+# Visionary
 
-# Project Description
-
----
-
-# TechStack Used:
-
-- ReactJS
-- Three.js
-- AR.js
+### 🚀 Redefining Education through Immersive Augmented Reality & AI
 
 ---
-
-### Team Member:
-
-- Sanket Shrestha
-- Prashant Adhikari
-- Smriti Basnet
-- Priyanka Khatri
