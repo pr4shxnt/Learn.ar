@@ -8,12 +8,19 @@ import {
 } from "@react-three/drei";
 import { useParams, useNavigate } from "react-router-dom";
 import { MOCK_BIOLOGY_CHAPTERS } from "./mockData";
-import { XR, createXRStore, IfInSessionMode } from "@react-three/xr";
+import { XR, createXRStore, IfInSessionMode, useXR } from "@react-three/xr";
 
 // Component to load and display the GLTF model
 const Model = ({ url, scale }: { url: string; scale: number }) => {
   const { scene } = useGLTF(url);
-  return <primitive object={scene} scale={scale} />;
+  const { isPresenting } = useXR();
+
+  // In AR, position model at a fixed point in front of user to prevent drift
+  const position: [number, number, number] = isPresenting
+    ? [0, -0.5, -2] // 2m in front, 0.5m down from initial camera position
+    : [0, 0, 0];
+
+  return <primitive object={scene} scale={scale} position={position} />;
 };
 
 const store = createXRStore();
@@ -93,7 +100,7 @@ const HumanAnatomy = () => {
               {data.threeDModels.length > 0 ? (
                 <Model
                   url={data.threeDModels[0]}
-                  scale={chapterId === "human-anatomy" ? 100 : 15}
+                  scale={chapterId === "human-anatomy" ? 100 : 10}
                 />
               ) : (
                 <mesh rotation={[0, 0, 0]}>
