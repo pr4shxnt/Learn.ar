@@ -266,20 +266,35 @@ const InorganicReaction: React.FC = () => {
   };
 
   const createProductBeaker = (position: any, reaction: any) => {
+    console.log(
+      "Creating product beaker at:",
+      position,
+      "with reaction:",
+      reaction,
+    );
     const arContent = document.querySelector("#ar-content");
-    if (!arContent || !reaction) return;
+    if (!arContent) {
+      console.error("AR content container not found!");
+      return;
+    }
 
     const product = document.createElement("a-entity");
     product.setAttribute("class", "beaker product");
-    product.setAttribute("position", position);
+    // Ensure position is a string for A-Frame
+    const posStr = `${position.x} ${position.y} ${position.z}`;
+    product.setAttribute("position", posStr);
     product.setAttribute("id", "product-beaker");
 
     const config = LAB_CONFIG.beaker;
-    const modelId = reaction.productModelId || "#salt-model";
+    const modelId = reaction?.productModelId || "#product-model";
+    const productName = reaction?.products || "Unknown Product";
+
+    console.log("Using modelId:", modelId, "for product:", productName);
+
     product.innerHTML = `
       <a-gltf-model src="${modelId}" scale="${config.scale.x} ${config.scale.y} ${config.scale.z}"></a-gltf-model>
       <a-text class="beaker-label"
-             value="Product:\\n${reaction.products}" 
+             value="Product:\\n${productName}" 
              position="0 ${config.label.y} ${config.label.z}" 
              align="center" 
              color="${config.label.color}" 
@@ -295,6 +310,7 @@ const InorganicReaction: React.FC = () => {
 
     arContent.appendChild(product);
     product.addEventListener("click", () => window.location.reload());
+    console.log("Product beaker added to scene.");
   };
 
   const mixChemicals = (pourerData: any, targetData: any) => {
@@ -360,9 +376,15 @@ const InorganicReaction: React.FC = () => {
 
     const reaction = REACTIONS.find(
       (r) =>
-        r.reactants.includes(pourerData.name) &&
-        r.reactants.includes(targetData.name),
+        r.reactants.some(
+          (name) => name.toLowerCase() === pourerData.name.toLowerCase(),
+        ) &&
+        r.reactants.some(
+          (name) => name.toLowerCase() === targetData.name.toLowerCase(),
+        ),
     );
+
+    console.log("Found reaction:", reaction);
 
     if (reaction) {
       showReactionEffect(posPourer, posTarget, reaction);
